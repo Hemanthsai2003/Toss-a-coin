@@ -1,0 +1,94 @@
+<html>
+    <style>
+    canvas{
+        border: 10px  black;
+        margin-left:500px;
+    }
+    .button{
+        margin-left:700px;
+        margin-top: 30px;
+    }
+    .button button{       
+        font-size: 20px;
+        padding: 10px 20px;
+    }
+    @keyframes example {
+        0%{transform: rotateX(0deg);}
+        25%{transform: rotateY(90deg);}
+        50%{transform:rotateY(180deg);}
+        75%{transform:rotateY(90deg);}
+        100%{transform: rotateX(0deg);}  
+        
+    }
+    </style>
+    <body>
+        <h1 style = "text-align : center ;"> TOSS A COIN </h1>
+            <canvas id="circle" width="200" height="200"></canvas>
+            
+            <div class = "button">
+                <p id="Tossing"></p>
+                <h2 id="result"></h2>
+                <button onclick = "cointoss()">TOSS</button>
+            </div>
+            
+        <script>
+        var canvas = document.getElementById("circle");
+        var con = canvas.getContext("2d");
+        var centerX = canvas.width/2;
+        var centerY = canvas.height/2;
+        var radius = 60;
+        
+        function circling(content){
+            con.clearRect(0, 0, canvas.width, canvas.height);
+            con.beginPath();
+            con.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            con.stroke();
+
+            con.font = "60px Calisto MT";
+            con.textAlign = "center";
+            con.textBaseline = "middle";
+            con.fillStyle = "bold black";
+            con.fillText(content, centerX, centerY);
+        }
+
+
+        var contents = ["H", "T"];
+        var currentIndex = 0;
+        
+        function updateContent() {
+          currentIndex = (currentIndex + 1) % contents.length;
+          circling(contents[currentIndex]);
+        }
+
+        
+
+        function cointoss(){
+            var animDuration = 200;
+            var animIterations = 15; 
+            var totalDuration = animDuration * animIterations; 
+
+            canvas.style.animationName = "example";
+            canvas.style.animationDuration = animDuration  + "ms";
+            canvas.style.animationTimingFunction = "ease";
+            canvas.style.animationIterationCount = animIterations;
+            for (let i = 1; i <= animIterations; i++) {
+                setTimeout(updateContent, (i - 1) * animDuration + animDuration / 4);
+            }
+            setTimeout(function() {
+                canvas.style.animation = '';
+                var finalContent = contents[Math.floor(Math.random() * contents.length)];
+                circling(finalContent);
+                var resultElement = document.getElementById("result");
+                if (finalContent == "H") {
+                resultElement.textContent = "Heads";
+                } else {
+                resultElement.textContent = "Tails";
+                }
+            }, totalDuration);
+        }
+        circling(contents[currentIndex]); 
+        
+
+        </script>
+    </body>
+</html>
